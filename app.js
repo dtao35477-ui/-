@@ -42,6 +42,14 @@
     if(game){updateLabels();render();announce(statusKey,statusError);}
   }
   function scoreEntries(){return Object.entries(scores).filter(([,v])=>v&&typeof v==='object'&&Number.isFinite(v.time)&&v.time>=0);}
+  function recordScore(){
+    const current=read('starpath-scores-v1',{});
+    if(current&&typeof current==='object'&&!Array.isArray(current))scores=current;
+    const key=E.gameKey(options),old=scores[key];
+    if(!old||!Number.isFinite(old.time)||elapsed<old.time)scores[key]={time:elapsed,hints};
+    const entries=scoreEntries();if(entries.length>1500)scores=Object.fromEntries(entries.slice(-1500));
+    write('starpath-scores-v1',scores);
+  }
   function updateLabels(){
     const daily=options.mode==='daily';
     document.querySelectorAll('[data-mode]').forEach(el=>{const active=el.dataset.mode===options.mode;el.classList.toggle('active',active);el.setAttribute('aria-pressed',active);});
@@ -93,14 +101,12 @@
     const previous=read('starpath-progress:'+E.gameKey(options),null);
     let restored=false;
     if(previous&&game.restore(previous.path)){elapsed=Number.isFinite(previous.elapsed)?Math.max(0,Math.min(previous.elapsed,31536000000)):0;hints=Number.isInteger(previous.hints)?Math.max(0,Math.min(previous.hints,100000)):0;started=previous.started===true||game.path.length>1;restored=game.path.length>1;}
+    if(game.won)recordScore();
     buildBoard();updateLabels();render();syncURL();announce(!storageOK?'storage':game.won?'restoredWin':restored?'saved':'start');
   }
   function openDialog(id){tick();const dialog=$(id);if(!dialog.open)dialog.showModal();}
   function finish(){
-    const key=E.gameKey(options),old=scores[key];if(!old||!Number.isFinite(old.time)||elapsed<old.time)scores[key]={time:elapsed,hints};
-    // Keep device-local records bounded; no telemetry or account is involved.
-    const entries=scoreEntries();if(entries.length>1500)scores=Object.fromEntries(entries.slice(-1500));
-    write('starpath-scores-v1',scores);save();updateLabels();announce('won');tone(true);
+    recordScore();save();updateLabels();announce('won');tone(true);
     $('win-time').textContent=time(elapsed);$('win-hints').textContent=hints;$('win-share-status').textContent='';openDialog('win-dialog');
   }
   function perform(cell,quiet=false){
@@ -151,5 +157,6 @@
   }
   $('share').addEventListener('click',share);$('share-result').addEventListener('click',share);$('select-share').addEventListener('click',()=>{$('share-text').focus();$('share-text').select();});
   document.addEventListener('visibilitychange',()=>{lastTick=performance.now();save();});window.addEventListener('pagehide',save);
+  window.addEventListener('storage',event=>{if(event.key==='starpath-scores-v1'){const current=read(event.key,{});if(current&&typeof current==='object'&&!Array.isArray(current)){scores=current;updateLabels();}}});
   translate();load();setInterval(()=>{tick();if(started&&!game.won&&!document.hidden&&!anyDialog())save();},1000);
 })();
