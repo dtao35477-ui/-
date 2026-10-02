@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101e28">
+  <meta name="description" content="A little space for your mind. Connect the stars, fill the sky. Play Starpath, a free daily logic puzzle in English and Chinese.">
+  <meta property="og:title" content="Starpath · A daily path puzzle">
+  <meta property="og:description" content="One path. Every star. A quiet daily challenge for your mind.">
+  <meta property="og:type" content="website">
+  <title>Starpath · A daily path puzzle</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./engine.js" defer></script>
+  <script src="./levels.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 2.7 7.3L22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 5 4 10l5 5M4 10h10a6 6 0 0 1 0 12" transform="translate(0 -2)"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></symbol>
+    <symbol id="i-hint" viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4M8 14a6 6 0 1 1 8 0c-1 1-1 2-1 2H9s0-1-1-2Z"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M5 13v7h14v-7"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5V4Zm4 4a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></symbol>
+  </defs></svg>
+  <div class="sky" aria-hidden="true"></div>
+  <header class="header">
+    <a class="brand" href="./" aria-label="Starpath home"><svg class="brand-icon"><use href="#i-star"/></svg><span>starpath<span class="brand-dot">.</span></span></a>
+    <span class="header-caption" data-i18n="dailyRitual">YOUR DAILY MOMENT OF CLARITY</span>
+    <div class="header-actions">
+      <button id="language" class="text-button" type="button">中文</button>
+      <button id="sound" class="icon-button sound-off" type="button" aria-pressed="false" aria-label="Enable sound"><svg class="icon"><use href="#i-sound"/></svg><span class="off-mark"></span></button>
+      <button id="help" class="help-button" type="button" data-i18n="how">How to play</button>
+    </div>
+  </header>
+  <main class="layout">
+    <section class="intro" aria-labelledby="intro-title">
+      <div class="eyebrow"><span class="live-dot"></span><span data-i18n="eyebrow">A SMALL DAILY DISCOVERY</span></div>
+      <h1 id="intro-title" data-i18n-html="headline">One path.<br>Every <em>star.</em></h1>
+      <p class="intro-copy" data-i18n="intro">Connect the numbers. Fill every square. Find a little clarity along the way.</p>
+      <div class="mission">
+        <div class="mission-top"><svg class="icon"><use href="#i-star"/></svg><span id="mission-label">TODAY’S EXPEDITION</span></div>
+        <p id="mission-name">The quiet orbit</p>
+        <div class="mission-meta"><span id="puzzle-date"></span><span id="grid-size">5 × 5</span></div>
+      </div>
+      <div class="personal-stats" aria-label="Local play statistics">
+        <div><strong id="solved-count">0</strong><span data-i18n="solved">puzzles solved</span></div>
+        <span class="stat-divider"></span>
+        <div><strong id="best-time">—</strong><span data-i18n="best">best · this level</span></div>
+      </div>
+      <p class="local-note" data-i18n="local">Your progress stays on this device.</p>
+    </section>
+    <section class="game-panel" aria-label="Starpath puzzle">
+      <div class="panel-top">
+        <div class="mode-switch" role="group" aria-label="Game mode">
+          <button type="button" data-mode="daily" class="active" aria-pressed="true" data-i18n="daily">Daily</button>
+          <button type="button" data-mode="practice" aria-pressed="false" data-i18n="practice">Explore</button>
+        </div>
+        <span class="edition" id="edition">DAILY / UTC</span>
+      </div>
+      <div class="difficulty-switch" role="group" aria-label="Difficulty">
+        <button type="button" data-difficulty="calm" aria-pressed="false"><span class="difficulty-dot"></span><span data-i18n="calm">Calm</span><small>4 × 4</small></button>
+        <button type="button" data-difficulty="focus" class="active" aria-pressed="true"><span class="difficulty-dot"></span><span data-i18n="focus">Focus</span><small>5 × 5</small></button>
+        <button type="button" data-difficulty="deep" aria-pressed="false"><span class="difficulty-dot"></span><span data-i18n="deep">Deep</span><small>6 × 6</small></button>
+      </div>
+      <div class="board-meta"><span id="next-star"><span data-i18n="next">NEXT STAR</span> <strong>2</strong></span><span class="timer"><svg class="icon"><use href="#i-clock"/></svg><span id="timer">0:00</span></span></div>
+      <div class="board-wrap">
+        <div id="board" class="board" tabindex="0" role="group" aria-label="Puzzle grid. Use arrow keys to move, Backspace to undo."></div>
+        <svg id="path-layer" class="path-layer" aria-hidden="true"></svg>
+        <svg id="wall-layer" class="wall-layer" aria-hidden="true"></svg>
+        <div id="checkpoint-layer" class="checkpoint-layer" aria-hidden="true"></div>
+      </div>
+      <div class="progress-row"><div class="progress-track"><div id="progress-fill"></div></div><span id="progress-count">1 / 25</span></div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div class="controls">
+        <button id="undo" type="button" class="control"><svg class="icon"><use href="#i-undo"/></svg><span data-i18n="undo">Undo</span></button>
+        <button id="reset" type="button" class="control"><svg class="icon"><use href="#i-reset"/></svg><span data-i18n="reset">Restart</span></button>
+        <button id="hint" type="button" class="control hint-button"><svg class="icon"><use href="#i-hint"/></svg><span data-i18n="hint">A little hint</span></button>
+      </div>
+      <button id="next-puzzle" type="button" class="next-puzzle" hidden><span data-i18n="nextPuzzle">Next expedition</span><svg class="icon"><use href="#i-arrow"/></svg></button>
+    </section>
+  </main>
+  <footer class="footer"><span data-i18n="footer">NO RUSH. JUST YOU AND THE STARS.</span><button id="share" type="button" class="text-button"><svg class="icon"><use href="#i-share"/></svg><span data-i18n="share">Share this puzzle</span></button></footer>
+  <dialog id="help-dialog" class="modal">
+    <button class="modal-close icon-button" type="button" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    <span class="eyebrow" data-i18n="welcome">A LITTLE GUIDANCE</span><h2 data-i18n="howTitle">Find your path.</h2>
+    <div class="tutorial-grid" aria-hidden="true"><svg viewBox="0 0 240 95"><path d="M20 22H92V72H165V22H220" fill="none" stroke="#d2f69a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/><g fill="#d2f69a"><circle cx="20" cy="22" r="17"/><circle cx="92" cy="72" r="17"/><circle cx="220" cy="22" r="17"/></g><g fill="#101e28" font-size="17" text-anchor="middle" font-family="sans-serif" font-weight="bold"><text x="20" y="28">1</text><text x="92" y="78">2</text><text x="220" y="28">3</text></g></svg></div>
+    <ol class="instructions"><li data-i18n="rule1">Start at 1. Drag or tap neighboring squares to draw a path.</li><li data-i18n="rule2">Visit every number in order, and fill every square exactly once.</li><li data-i18n="rule3">Finish at the last number. Pale walls cannot be crossed.</li></ol>
+    <p class="modal-note" data-i18n="rule4">Tap an earlier square to rewind. On a keyboard, use arrow keys and Backspace. A hint reveals the next step; it may rewind a wrong turn.</p>
+    <button type="button" class="primary-button" data-close data-i18n="letsPlay">Let’s find a path</button>
+    <p class="credits" data-i18n="credits">An independent path puzzle, inspired by the daily logic genre. Original code and puzzles. Not affiliated with LinkedIn or Zip.</p>
+  </dialog>
+  <dialog id="win-dialog" class="modal win-modal">
+    <button class="modal-close icon-button" type="button" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    <div class="win-star"><svg><use href="#i-star"/></svg></div>
+    <span class="eyebrow" data-i18n="complete">CONSTELLATION COMPLETE</span><h2 data-i18n="winTitle">Beautifully connected.</h2><p data-i18n="winCopy">Every square, every star. A moment well spent.</p>
+    <div class="win-stats"><div><strong id="win-time"></strong><span data-i18n="yourTime">your time</span></div><div><strong id="win-hints"></strong><span data-i18n="hintsUsed">hints used</span></div></div>
+    <button id="share-result" type="button" class="primary-button"><svg class="icon"><use href="#i-share"/></svg><span data-i18n="shareResult">Share your constellation</span></button>
+    <button id="win-next" type="button" class="secondary-button" data-i18n="keepExploring">Keep exploring</button>
+    <p id="win-share-status" role="status" class="modal-note"></p>
+  </dialog>
+  <dialog id="share-dialog" class="modal">
+    <button class="modal-close icon-button" type="button" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    <h2 data-i18n="shareFallback">Copy & share.</h2><p data-i18n="copyHelp">Copy the text below and send it to a friend.</p><textarea id="share-text" readonly rows="7" aria-label="Puzzle link and result"></textarea><button id="select-share" class="primary-button" type="button" data-i18n="selectText">Select text</button>
+  </dialog>
+  <noscript><div class="noscript">Please enable JavaScript to play Starpath. 请开启 JavaScript 后游玩。</div></noscript>
+</body>
+</html>

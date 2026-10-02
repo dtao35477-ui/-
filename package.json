@@ -1,0 +1,12 @@
+{
+  "name": "starpath-puzzle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A quiet, bilingual daily path puzzle. No build or runtime dependencies.",
+  "scripts": {
+    "start": "node scripts/serve.cjs",
+    "test": "node --test tests/engine.test.cjs",
+    "generate": "node scripts/generate.cjs"
+  },
+  "license": "MIT"
+}
