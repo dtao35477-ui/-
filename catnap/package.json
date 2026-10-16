@@ -1,0 +1,8 @@
+{
+  "name": "catnap-escape",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An original, cozy cat escape puzzle with 30 rooms and a daily challenge.",
+  "scripts": { "start": "node scripts/serve.cjs", "test": "node --test tests/engine.test.cjs" },
+  "license": "MIT"
+}

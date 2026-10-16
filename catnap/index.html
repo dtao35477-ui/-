@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f4ec">
+  <meta name="description" content="猫咪解堵 Catnap Escape：点击猫咪，沿着朝向送它们回家。30 个原创关卡与每日挑战，免费在线玩。">
+  <meta property="og:title" content="Catnap Escape · 猫咪解堵"><meta property="og:description" content="A little room. A lot of cats. Help every cat find its way out.">
+  <title>猫咪解堵 Catnap Escape</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css">
+  <script defer src="./engine.js"></script><script defer src="./app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Catnap Escape"><span class="brand-mark" aria-hidden="true"><img src="./favicon.svg" width="35" height="35" alt=""></span><span>catnap<span class="brand-dot">.</span><small>ESCAPE CLUB</small></span></a>
+    <div class="header-tools"><button id="sound" class="icon-button" aria-label="开启音效" aria-pressed="false"></button><button id="language" class="lang-button">EN</button><button id="help" class="icon-button" aria-label="玩法说明">?</button></div>
+  </header>
+  <main>
+    <section class="intro"><div><div class="eyebrow"><span></span> A LITTLE PUZZLE. A LITTLE PAUSE.</div><h1 data-i18n="title">小猫，该回家啦<span>。</span></h1><p data-i18n="subtitle">挪开一点点，快乐多一点。把房间里的猫咪都送出去。</p></div><span class="intro-doodle" aria-hidden="true">✳</span></section>
+    <div class="game-layout">
+      <section class="play-panel" data-i18n-aria="playArea" aria-label="游戏区域">
+        <div class="play-heading"><div class="room-label"><span class="room-dot"></span><span id="room-name"></span></div><span class="pill" id="level-label"></span></div>
+        <div class="board-wrap"><div class="room-top"><span class="little-window" aria-hidden="true"></span><span class="room-caption" data-i18n="roomCaption">THE COZIEST WAY OUT</span><span class="plant" aria-hidden="true">♣</span></div><div id="board" class="board" role="group" aria-label="猫咪棋盘"></div><div class="room-bottom"><span class="rug" aria-hidden="true"></span><span data-i18n="roomBottom">每只猫，都有自己的方向</span><span class="bowl" aria-hidden="true"></span></div></div>
+        <div class="board-status"><span id="status" role="status" aria-live="polite"></span><span id="progress-count"></span></div><div class="progress-track"><div id="progress-bar"></div></div>
+        <div class="play-actions"><button id="undo" class="action-button"><span aria-hidden="true">↶</span><span data-i18n="undo">撤回</span></button><button id="restart" class="action-button"><span aria-hidden="true">↻</span><span data-i18n="restart">重来</span></button><button id="hint" class="action-button hint-button"><span aria-hidden="true">✧</span><span data-i18n="hint">帮我一下</span></button></div>
+      </section>
+      <aside class="side-panel">
+        <div class="mode-switch" data-i18n-aria="gameMode" aria-label="游戏模式"><button id="journey" class="active" data-i18n="journey">闯关之旅</button><button id="daily" data-i18n="daily">每日挑战</button></div>
+        <section class="journey-card"><div class="card-kicker" id="chapter-kicker"></div><h2 id="chapter-name"></h2><p id="chapter-copy"></p><div class="chapter-stats"><strong id="solved-count">0<small>/ 30</small></strong><span data-i18n="levelsDone">已完成关卡</span><span class="tiny-stars" id="total-stars">☆ 0</span></div><div id="level-grid" class="level-grid" aria-label="选择关卡"></div><div id="daily-card" hidden><div class="daily-date" id="daily-date"></div><p data-i18n="dailyCopy">全世界，同一道小难题。每天 UTC 零点更新。</p><button id="share-daily" class="secondary-button" data-i18n="shareChallenge">分享今日挑战 ↗</button></div><div class="save-note"><span class="save-dot"></span><span id="save-note" data-i18n="saved">进度自动保存在当前浏览器</span></div></section>
+        <section class="how-card"><div class="how-icon" aria-hidden="true">↗</div><div><h3 data-i18n="howTitle">跟着小鼻子的方向</h3><p data-i18n="howCopy">点击猫咪，它会向前走。前面有同伴？先帮同伴离开。</p><button id="help-inline" class="text-button" data-i18n="learn">看看怎么玩 →</button></div></section>
+        <div class="slow-note"><span aria-hidden="true">✺</span><span data-i18n="slow">没有倒计时，慢慢来就好。</span></div>
+      </aside>
+    </div>
+    <footer><span>CATNAP ESCAPE <span class="footer-sep">/</span> <span data-i18n="footer">给大脑一个温柔的小休息</span></span><button id="share" class="text-button" data-i18n="share">邀请朋友来玩 ↗</button></footer>
+  </main>
+  <dialog id="help-dialog"><button class="close-dialog" data-close="help-dialog" aria-label="关闭">×</button><div class="modal-symbol">↗</div><p class="eyebrow">A QUICK HELLO</p><h2 data-i18n="helpTitle">让每一只猫咪回家</h2><ol class="help-list"><li data-i18n="help1">看猫咪鼻子和身上的箭头，确认它的朝向。</li><li data-i18n="help2">点击猫咪。前方直到房间边缘都没有其他猫咪，它就能离开。</li><li data-i18n="help3">被挡住也没关系，先移动其他猫咪。清空房间即可过关。</li></ol><p class="help-extra" data-i18n="helpExtra">不用提示、没有碰撞可得 3 星；不用提示且碰撞不超过 2 次可得 2 星。其他通关也有 1 星。键盘可用 Tab 选猫咪，Enter 或空格送它出门。</p><button class="primary-button" data-close="help-dialog" data-i18n="gotIt">知道啦，开始吧</button></dialog>
+  <dialog id="win-dialog"><button class="close-dialog" data-close="win-dialog" aria-label="关闭">×</button><div class="win-art" id="win-art" aria-hidden="true"></div><p class="eyebrow" data-i18n="winKicker">EVERY CAT IS HOME</p><h2 data-i18n="winTitle">好啦，全都回家了！</h2><div class="win-stars" id="win-stars"></div><p id="win-copy"></p><button id="next" class="primary-button"></button><button id="share-result" class="text-button" data-i18n="shareResult">分享我的成绩 ↗</button></dialog>
+  <dialog id="share-dialog"><button class="close-dialog" data-close="share-dialog" aria-label="关闭">×</button><h2 data-i18n="shareTitle">把快乐分享出去</h2><p data-i18n="copyManual">复制下面的文字，发给朋友：</p><textarea id="share-text" readonly rows="5" aria-label="分享内容"></textarea><button class="primary-button" data-close="share-dialog" data-i18n="done">完成</button></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
